@@ -1,0 +1,37 @@
+clear; clc;
+filename = 'map.png'; 
+resize_to = [600, 800];     % Final map size in pixels (height x width)
+threshold = 0.5;            % Threshold for binarization (0-1 grayscale)
+
+%load img
+img = imread(filename);
+if size(img, 3) == 3
+    img = rgb2gray(img);
+end
+
+% Resize
+img = imresize(img, resize_to);
+
+% Convert to binary (0 = black = wall, 1 = white = free)
+map = imbinarize(im2double(img), threshold);
+
+% Display 
+figure;
+imshow(map, 'InitialMagnification', 'fit');
+colormap(gray);
+
+% Save for SLAM
+save('binary_map.mat', 'map');
+fprintf('Map saved to binary_map.mat\n');
+
+% Define map size
+mapWidth = 500;
+mapHeight = 200;
+
+% Create a blank white map
+figure;
+hold on;
+axis([0 mapWidth 0 mapHeight]);
+axis equal;
+xlabel('X');
+ylabel('
